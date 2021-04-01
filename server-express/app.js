@@ -33,9 +33,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 //     next();
 // })
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/api/test', testRouter);
+// app.use('/', indexRouter);
+// app.use('/users', usersRouter);
+// app.use('/api/test', testRouter);
+
+app.get('/', function(req, res) {
+  res.render('index', { title: 'Express' });
+});
+app.get('/user', function(req, res) {
+  res.send('user');
+});
+app.get('/users', function(req, res) {
+  res.send('users');
+});
+app.get('/api/test', function(req, res) {
+  res.send('api test');
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
