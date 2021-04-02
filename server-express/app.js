@@ -7,6 +7,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var testRouter = require('./routes/test');
+var wsRouter = require('./routes/ws');
 
 var app = express();
 
@@ -33,22 +34,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 //     next();
 // })
 
-// app.use('/', indexRouter);
-// app.use('/users', usersRouter);
-// app.use('/api/test', testRouter);
-
-app.get('/', function(req, res) {
-  res.render('index', { title: 'Express' });
-});
-app.get('/user', function(req, res) {
-  res.send('user');
-});
-app.get('/users', function(req, res) {
-  res.send('users');
-});
-app.get('/api/test', function(req, res) {
-  res.send('api test');
-});
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
+app.use('/api/test', testRouter);
+app.use('/ws', wsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

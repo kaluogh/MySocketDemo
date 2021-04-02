@@ -3,6 +3,9 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import axios from 'axios'
+import Viser from 'viser-vue'
+
+Vue.use(Viser)
 
 Vue.config.productionTip = false
 
