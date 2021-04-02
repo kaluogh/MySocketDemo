@@ -2,9 +2,22 @@
   <div class="test">
     <h1>This is test page</h1>
     <div class="messageinfo">
-        <span>{{message}}</span>
+        <div>
+            <span>{{message}}</span>
+        </div>
+        <div>
+            <div v-for="(item, index) in sourceData" :key="index">
+                <span>{{ item.item }} - {{item.count}}</span>
+            </div>
+        </div>
         <div>
             <button type="button" @click="handleData">Change Data</button>
+        </div>
+        <div>
+            <button type="button" @click="handleConnect">handleConnect</button>
+        </div>
+        <div>
+            <button type="button" @click="handleCloseConnect">handleCloseConnect</button>
         </div>
     </div>
     <div>
@@ -28,6 +41,7 @@ export default {
     data() {
         return {
             message: 'default is null.',
+            socket: null,
             sourceData: [
                 { item: "学习", count: 40 },
                 { item: "听歌", count: 21 },
@@ -76,7 +90,7 @@ export default {
 
     methods: {
         getTestData () {
-            this.$axios.get('http://localhost:6123/expressserver/api/test').then((res) => {
+            this.$axios.get('http://localhost:6123/expressserver/test').then((res) => {
                 console.log(res)
                 this.message = res.data
             }).catch(function (error) {
@@ -92,16 +106,34 @@ export default {
                 { item: "发呆", count: Math.floor(Math.random() * 20 + 10) }
             ]
         },
+        handleConnect () {
+            this.socketListener()
+        },
+        handleCloseConnect () {
+            this.socket.close()
+            this.socket = null
+        },
         socketListener (){
-            let socket = new WebSocket("ws://localhost:3000/ws");
-            socket.addEventListener("open", function (event) {
-                console.log("socket is open")
-                socket.send("这里是html发送过来的")
-            });
+            this.socket = new WebSocket('ws://localhost:3000/websocket/test')
 
-            socket.addEventListener("message", function (event) {
-                console.log("Message from server", event.data);
-            });
+            this.socket.onopen = e => {
+                console.log(`WebSocket 连接状态： ${this.socket.readyState}`)
+            }
+
+            this.socket.onmessage = data => {
+                // this.message = data.data
+                try {
+                    let tempData = JSON.parse(data.data)
+                    this.sourceData = tempData
+                } catch (error) {
+                    this.message = data.data
+                }
+            }
+
+            this.socket.onclose = data => {
+                console.log('WebSocket连接已关闭')
+                console.log(data);
+            }
         }
     }
 }
