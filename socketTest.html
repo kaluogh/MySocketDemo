@@ -20,5 +20,9 @@
     socket.addEventListener("message", function (event) {
       console.log("Message from server", event.data);
     });
+
+    socket.onclose = function(){
+        console.log('close')
+    }
 </script>
 </html>
