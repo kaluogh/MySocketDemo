@@ -3,7 +3,8 @@ const sendBtn = document.getElementById('send-btn')
 const exit = document.getElementById('exit')
 const receiveBox = document.getElementById('receive-box')
 
-const ws = new WebSocket('ws://127.0.0.1:3000/websocket/test')
+// const ws = new WebSocket('ws://127.0.0.1:3000/websocket/test')
+const ws = new WebSocket('ws://localhost:3000/websocket/test')
 ws.onopen = e => {
   console.log(`WebSocket 连接状态： ${ws.readyState}`)
 }
